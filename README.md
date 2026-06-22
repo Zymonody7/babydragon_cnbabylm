@@ -36,21 +36,25 @@ templates — **no large-LM-generated text**.
 pip install -r requirements.txt          # + torch / torch_npu (Ascend) or torch (CUDA)
 ```
 
-**Option A — full closed loop (rebuild data from scratch):**
-```bash
-bash run_all.sh                          # raw data → dataset/ → output/final
-```
-`run_all.sh` runs the whole chain in dependency order; every step writes into this
-repo (`data/`, `data_facts/`, `dataset/`, `output/`, all git-ignored).
+Processing and training are two separate scripts:
+- **`run_process.sh`** — raw data → `./dataset/` (data only, no training)
+- **`train/train.sh`** — `./dataset/` → `./output/final` (training only)
 
-**Option B — train directly on the prebuilt dataset (skip the data pipeline):**
+**Option A — full closed loop (rebuild data, then train):**
 ```bash
-# place the prebuilt `dataset/` (token_ids/word_ids/pinyin_ids .npy + tokenizer +
-# pinyin_vocab.json) at the repo root, then:
+bash run_process.sh                      # raw data → dataset/   (writes data/, data_facts/, dataset/)
+cd train && bash train.sh                # dataset/ → ../output/final
+# (or just: bash run_all.sh — wrapper that does both)
+```
+
+**Option B — train directly on the prebuilt dataset (skip processing):**
+```bash
+# download the released dataset/ (the exact set the submitted model was trained on)
+huggingface-cli download zymonody/babydragon-cnbabylm-dataset --repo-type dataset --local-dir dataset
 cd train && bash train.sh                # → ../output/final
 ```
-`dataset/` is fully self-contained (tokenizer + pinyin vocab are packed in), so no
-data rebuild is needed to reproduce training.
+`dataset/` is fully self-contained (tokenizer + pinyin vocab packed in), so no data
+rebuild is needed to reproduce training.
 
 ### Platform note (NVIDIA / Ascend)
 
