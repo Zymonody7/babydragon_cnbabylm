@@ -30,16 +30,35 @@ templates — **no large-LM-generated text**.
 
 ---
 
-## Quick start (closed loop)
+## Quick start
 
 ```bash
-pip install -r requirements.txt          # + torch / torch_npu for your platform
-bash run_all.sh                          # raw data → dataset/ → output/final  (16-card NPU)
-# then evaluate and submit (below)
+pip install -r requirements.txt          # + torch / torch_npu (Ascend) or torch (CUDA)
 ```
 
+**Option A — full closed loop (rebuild data from scratch):**
+```bash
+bash run_all.sh                          # raw data → dataset/ → output/final
+```
 `run_all.sh` runs the whole chain in dependency order; every step writes into this
 repo (`data/`, `data_facts/`, `dataset/`, `output/`, all git-ignored).
+
+**Option B — train directly on the prebuilt dataset (skip the data pipeline):**
+```bash
+# place the prebuilt `dataset/` (token_ids/word_ids/pinyin_ids .npy + tokenizer +
+# pinyin_vocab.json) at the repo root, then:
+cd train && bash train.sh                # → ../output/final
+```
+`dataset/` is fully self-contained (tokenizer + pinyin vocab are packed in), so no
+data rebuild is needed to reproduce training.
+
+### Platform note (NVIDIA / Ascend)
+
+`train/train.sh` and `train.py` are **portable**: they auto-detect the device
+(CUDA `nccl` or Ascend `torch_npu`/`hccl`) and the GPU count. On an NVIDIA host it
+just works — `nvidia-smi` sets `--nproc_per_node`, and `gradient_accumulation_steps`
+auto-scales to keep the global batch at 256 (the original 16-card × 16 setting).
+Override with `NPROC=<n>` / `GRAD_ACCUM=<n>` env vars.
 
 ### Raw-data acquisition
 
