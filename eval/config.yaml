@@ -1,0 +1,41 @@
+models:
+  - path: zymonody/chinese-babylm-v4   # or local ../output/final
+    backend: mlm
+
+tasks:
+  zero_shot:
+    - zhoblimp
+    - xcomps_zh
+    - hanzi_structure
+    - hanzi_pinyin
+    - hanzi_structure_hidden
+    - hanzi_pinyin_hidden
+  cogbench:
+    - word_fmri
+    - fmri
+  finetune:
+    - afqmc
+    - ocnli
+    - tnews
+    - cluewsc2020
+    - c3
+    - diagnostic_nli
+
+eval_dir: evaluation_data
+results_dir: results
+save_item_with_unk: true
+
+finetune_hparams:
+  lr: 3.0e-5
+  batch_size: 32
+  max_epochs: 10
+  sequence_length: 128
+  seed: 42
+  task_overrides:
+    cluewsc2020:
+      max_epochs: 30
+      sequence_length: 160
+    c3:
+      max_epochs: 10
+    diagnostic_nli:
+      max_epochs: 10
