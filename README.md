@@ -145,8 +145,10 @@ unseen characters**, not memorized test items.
 
 ## Artifacts
 
-- Model + tokenizer: https://huggingface.co/zymonody/chinese-babylm-v4 (public)
-- Leaderboard entry: BabyDragon-v4 · `chinese-babylm-org/chinesebabylm-2026-final-leaderboard`
+- **Code (this repo)**: https://github.com/Zymonody7/babydragon_cnbabylm
+- **Model + tokenizer**: https://huggingface.co/zymonody/chinese-babylm-v4 (public)
+- **Prebuilt training set**: https://huggingface.co/datasets/zymonody/babydragon-cnbabylm-dataset (public) — the exact preprocessed data the model was trained on (222795×512, ≈92.9M jieba words); download to `dataset/` and run `train/train.sh` directly.
+- **Leaderboard entry**: BabyDragon-v4 · `chinese-babylm-org/chinesebabylm-2026-final-leaderboard`
 - `results/results.json` — the exported scores submitted to the leaderboard.
 
 ## Layout
