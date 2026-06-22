@@ -30,6 +30,7 @@ $PY $DP/08_build_structure_facts.py
 $PY $DP/09_amplify_hanzi_facts.py
 $PY $DP/10_build_grammar_facts.py
 $PY $DP/11_combine_facts.py
+$PY $DP/check_budget.py          # verify base + facts <= 102M jieba words
 
 # Preprocess the FACTS (expanded tokenizer) -> data_facts/*.npy
 $PY train/preprocess.py --input data/facts/all_facts.jsonl --output_dir data_facts --tokenizer data/tokenizer_expanded
